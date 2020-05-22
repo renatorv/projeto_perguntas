@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import './questao.dart';
+import './resposta.dart';
 
 void main() => runApp(PerguntasApp());
 
 class _PerguntaAppState extends State<PerguntasApp> {
   var _perguntaSelecionada = 0;
 
-  void _responder(){
+  void _responder() {
     setState(() {
       _perguntaSelecionada++;
     });
@@ -14,11 +15,28 @@ class _PerguntaAppState extends State<PerguntasApp> {
 
   @override
   Widget build(BuildContext context) {
-
-    final perguntas = [
-      'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?',
+    final List<Map<String, Object>> perguntas = [
+      {
+        'texto': 'Qual é a sua cor favorita?',
+        'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco']
+      },
+      {
+        'texto': 'Qual é o seu animal favorito?',
+        'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão']
+      },
+      {
+        'texto': 'Qual é o seu instruto favorito?',
+        'respostas': ['Maria', 'João', 'Leo', 'Antônio']
+      }
     ];
+
+    // ABORDAGEM IMPERATIVA
+    List<Widget> respostas = [];
+
+    for(String textoResp in perguntas[_perguntaSelecionada]['respostas']){
+      // print(textoResp);      
+      respostas.add(Resposta(textoResp, _responder));
+    }
 
     return MaterialApp(
       home: Scaffold(
@@ -27,19 +45,8 @@ class _PerguntaAppState extends State<PerguntasApp> {
         ),
         body: Column(
           children: <Widget>[
-            Questao(perguntas[_perguntaSelecionada]),
-            RaisedButton(
-              child: Text('Resposta 1'),
-              onPressed: _responder,
-              ),
-            RaisedButton(
-              child: Text('Resposta 2'),
-              onPressed: _responder,
-              ),
-            RaisedButton(
-              child: Text('Resposta 3'),
-              onPressed: _responder,
-              ),
+            Questao(perguntas[_perguntaSelecionada]['texto']),
+            ...respostas
           ],
         ),
       ),
@@ -48,9 +55,11 @@ class _PerguntaAppState extends State<PerguntasApp> {
 }
 
 class PerguntasApp extends StatefulWidget {
-
-  _PerguntaAppState createState(){
+  _PerguntaAppState createState() {
     return _PerguntaAppState();
   }
-
 }
+
+// DIFERENÇA ENTRE CÓDIGO IMPERATIVO E DECLARATIVO
+// HTML DECLARATIVO: DIZEMOS O QUE QUEREMOS
+// SQL DECLARATIVO: DIZEMOS O QUE QUEREMOS E NÃO DIZEMOS DA FORMA COMO QUEREMOS ISSO
